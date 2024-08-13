@@ -61,50 +61,48 @@ func RemovePost(id uint){
 
 }
 
-func isAuthorExsits(caller std.Address,upvote bool,p Post) bool{
-	if upvote{
+func hasVoted(caller std.Address, upvote bool, p *Post) bool {
+	if upvote {
 		for _, a := range p.upvoters {
 			if a == caller {
-				return false
+				return true
 			}
-			
-		} 
-		return true
-	}
-	for _, a := range p.downvoters {
-		if a == caller {
-			return false
 		}
-	} 
-	return true
-	
+	} else {
+		for _, a := range p.downvoters {
+			if a == caller {
+				return true
+			}
+		}
+	}
+	return false
 }
 
-func Upvote(id uint) {
-    _, p := getPost(id)
-    caller := std.PrevRealm().Addr()
-    if p == nil {
-        panic("could not find post with specified id")
-    }
-    if !isAuthorExsits(caller, true, *p) {
-        panic("You already upvoted")
-    }
-    p.upvoters = append(p.upvoters, caller)
-    p.upvotes++
-}
-
-
-func Downvote(id uint) {
+func handleVote(id uint, upvote bool) {
 	_, p := getPost(id)
 	caller := std.PrevRealm().Addr()
 	if p == nil {
 		panic("could not find post with specified id")
 	}
-	if !isAuthorExsits(caller, false, *p) {
-        panic("You already downvoted")
-    }
-    p.downvoters = append(p.downvoters, caller)
-	p.downvotes++
+	if hasVoted(caller, upvote, p) {
+		panic("You already voted")
+	}
+	if upvote {
+		p.upvoters = append(p.upvoters, caller)
+		p.upvotes++
+	} else {
+		p.downvoters = append(p.downvoters, caller)
+		p.downvotes++
+	}
+}
+
+func Upvote(id uint) {
+	handleVote(id, true)
+}
+
+
+func Downvote(id uint) {
+	handleVote(id, false)
 }
 
 func getPost(id uint) (int,*Post){
