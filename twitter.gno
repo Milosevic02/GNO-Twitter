@@ -8,6 +8,8 @@ import(
 var(
 	posts []*Post
 	idCounter uint
+	
+
 )
 
 type Post struct{
@@ -18,6 +20,8 @@ type Post struct{
 	createdAt time.Time
 	upvotes uint
 	downvotes uint
+	upvoters []std.Address
+	downvoters []std.Address
 
 }
 
@@ -31,6 +35,7 @@ func AddPost(text string) uint{
 		id:idCounter,
 		author:std.PrevRealm().Addr(),
 		createdAt:time.Now(),
+
 	}
 	posts = append(posts,p)
 	idCounter++
@@ -56,21 +61,49 @@ func RemovePost(id uint){
 
 }
 
-func Upvote(id uint){
-	_,p := getPost(id)
-	if p == nil{
-		panic("could not find post with specified id")
+func isAuthorExsits(caller std.Address,upvote bool,p Post) bool{
+	if upvote{
+		for _, a := range p.upvoters {
+			if a == caller {
+				return false
+			}
+			
+		} 
+		return true
 	}
-
-	p.upvotes++
+	for _, a := range p.downvoters {
+		if a == caller {
+			return false
+		}
+	} 
+	return true
+	
 }
+
+func Upvote(id uint) {
+    _, p := getPost(id)
+    caller := std.PrevRealm().Addr()
+    if p == nil {
+        panic("could not find post with specified id")
+    }
+    if !isAuthorExsits(caller, true, *p) {
+        panic("You already upvoted")
+    }
+    p.upvoters = append(p.upvoters, caller)
+    p.upvotes++
+}
+
 
 func Downvote(id uint) {
 	_, p := getPost(id)
+	caller := std.PrevRealm().Addr()
 	if p == nil {
 		panic("could not find post with specified id")
 	}
-
+	if !isAuthorExsits(caller, false, *p) {
+        panic("You already downvoted")
+    }
+    p.downvoters = append(p.downvoters, caller)
 	p.downvotes++
 }
 
