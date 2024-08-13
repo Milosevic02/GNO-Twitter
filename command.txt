@@ -1,0 +1,7 @@
+Call AddPost Function:   
+    gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "AddPost" --args "Post 1" --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey
+
+Call RemovePost Function:
+    gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "RemovePost" --args 1 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey
+
+
