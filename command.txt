@@ -4,4 +4,8 @@ Call AddPost Function:
 Call RemovePost Function:
     gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "RemovePost" --args 1 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey
 
+Call Upvote Function:
+    gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "Upvote" --args 0 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey
 
+Call Downvote Function:
+    gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "Downvote" --args 0 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey

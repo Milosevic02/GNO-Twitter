@@ -7,7 +7,7 @@ import(
 )
 
 func (p Post) String() string{
-	return ufmt.Sprintf("Text: %s\n\nAuthor: %s\n\n Time: %s", p.text, p.author.String(), p.createdAt.Format(time.RFC822))
+	return ufmt.Sprintf("Text: %s\n\nAuthor: %s\n\n Time: %s\n\nUp: %d, Down: %d", p.text, p.author.String(), p.createdAt.Format(time.RFC822), p.upvotes, p.downvotes)
 }
 
 func Render(_ string) string {

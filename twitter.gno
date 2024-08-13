@@ -16,6 +16,8 @@ type Post struct{
 	text string
 	author std.Address
 	createdAt time.Time
+	upvotes uint
+	downvotes uint
 
 }
 
@@ -52,6 +54,24 @@ func RemovePost(id uint){
 
 	posts = append(posts[:idx], posts[idx+1:]...)
 
+}
+
+func Upvote(id uint){
+	_,p := getPost(id)
+	if p == nil{
+		panic("could not find post with specified id")
+	}
+
+	p.upvotes++
+}
+
+func Downvote(id uint) {
+	_, p := getPost(id)
+	if p == nil {
+		panic("could not find post with specified id")
+	}
+
+	p.downvotes++
 }
 
 func getPost(id uint) (int,*Post){
