@@ -9,3 +9,6 @@ Call Upvote Function:
 
 Call Downvote Function:
     gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "Downvote" --args 0 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey
+
+Call Tip Function:
+    gnokey maketx call --pkgpath "gno.land/r/petnica/twitter" --func "TipPost" --args 0 --gas-fee 10000000ugnot --gas-wanted 8000000 --broadcast  --remote localhost:26657 mykey

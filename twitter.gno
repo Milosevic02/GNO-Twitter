@@ -22,6 +22,7 @@ type Post struct{
 	downvotes uint
 	upvoters []std.Address
 	downvoters []std.Address
+	tipTotal int64
 
 }
 
@@ -105,6 +106,25 @@ func Downvote(id uint) {
 	handleVote(id, false)
 }
 
+func TipPost(id uint){
+	tipAmt := std.GetOrigSend().AmountOf("ugnot")
+	if tipAmt <= 0{
+		panic("cannot tip 0 or less!")
+	}
+	_,p := getPost(id)
+	if p == nil{
+		panic("could not find post with specified id")
+	}
+
+	banker := std.GetBanker(std.BankerTypeOrigSend)
+
+	coinTip := std.NewCoin("ugnot",tipAmt)
+	banker.SendCoins(std.CurrentRealm().Addr(),p.author,std.NewCoins(coinTip))
+
+	p.tipTotal += tipAmt
+}
+
+
 func getPost(id uint) (int,*Post){
 	for i,p := range posts{
 		if p.id == id{
@@ -114,3 +134,4 @@ func getPost(id uint) (int,*Post){
 
 	return -1,nil
 }
+
